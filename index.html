@@ -1,69 +1,81 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-
 <meta charset="UTF-8">
-
-<title>TSP FM</title>
-
+<title>TSP FM Terminal Player</title>
 <style>
-
 body {
-background:#000;
-color:#00ff66;
-font-family: monospace;
-margin:40px;
+  background:#000;
+  color:#00ff66;
+  font-family: monospace;
+  margin:40px;
 }
 
 h1 {
-font-weight: normal;
+  font-weight: normal;
 }
 
-button {
-background:black;
-color:#00ff66;
-border:1px solid #00ff66;
-padding:8px 12px;
-font-family: monospace;
-cursor:pointer;
+#terminal-player {
+  background:black;
+  color:#00ff66;
+  font-family: monospace;
+  padding:20px;
+  max-width:300px;
 }
 
-button:hover {
-background:#00ff66;
-color:black;
+#terminal-player button {
+  background:black;
+  color:#00ff66;
+  border:1px solid #00ff66;
+  padding:6px 12px;
+  margin-right:6px;
+  font-family: monospace;
+  cursor:pointer;
 }
 
-audio {
-margin-top:10px;
+#terminal-player button:hover {
+  background:#00ff66;
+  color:black;
 }
 
 .line {
-margin:6px 0;
+  margin:6px 0;
 }
-
 </style>
-
 </head>
-
 <body>
 
 <h1>TSP FM</h1>
 
-<div class="line">Terminal • Server • Port</div>
-<br>
+<div id="terminal-player">
+  <div class="line">$ TSP FM</div>
+  <div class="line">$ status: <span id="status">Paused</span></div>
+  <div class="line">
+    <button id="play">▶️ Play</button>
+    <button id="pause">⏸️ Pause</button>
+  </div>
+</div>
 
-<div class="line">$ connecting to stream...</div>
-<div class="line">$ status: ON AIR</div>
+<script>
+const audio = new Audio("ССЫЛКА_ОТ_LTH/radio.mp3");
+audio.preload = "auto";
 
-<audio controls autoplay>
-<source src="ССЫЛКА_ОТ_LTH/radio.mp3" type="audio/mpeg">
-</audio>
+const status = document.getElementById("status");
 
-<br><br>
+document.getElementById("play").onclick = () => {
+  audio.play();
+  status.textContent = "Playing";
+};
 
-<button onclick="location.reload()">
-$ reconnect
-</button>
+document.getElementById("pause").onclick = () => {
+  audio.pause();
+  status.textContent = "Paused";
+};
+
+// Автообновление статуса, если поток остановился сам
+audio.onpause = () => { status.textContent = "Paused"; }
+audio.onplay = () => { status.textContent = "Playing"; }
+</script>
 
 </body>
 </html>
