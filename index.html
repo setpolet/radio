@@ -1,309 +1,73 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
+
 <title>TSP FM</title>
+
 <style>
+
 body {
-  background: #000;
-  color: #00ff66;
-  font-family: monospace;
-  margin: 40px;
+background:#000;
+color:#00ff66;
+font-family: monospace;
+margin:40px;
 }
+
 h1 {
-  font-weight: normal;
+font-weight: normal;
 }
-.line {
-  margin: 6px 0;
-}
-#cursor {
-  display: inline-block;
-  width: 10px;
-  animation: blink 1s steps(1) infinite;
-}
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
+
 button {
-  background: black;
-  color: #00ff66;
-  border: 1px solid #00ff66;
-  padding: 8px 12px;
-  font-family: monospace;
-  cursor: pointer;
+background:black;
+color:#00ff66;
+border:1px solid #00ff66;
+padding:8px 12px;
+font-family: monospace;
+cursor:pointer;
 }
+
 button:hover {
-  background: #00ff66;
-  color: black;
+background:#00ff66;
+color:black;
 }
+
 audio {
-  margin-top: 10px;
-  display: none; /* Сначала скрыт, появится после boot */
+margin-top:10px;
 }
+
+.line {
+margin:6px 0;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <h1>TSP FM</h1>
+
 <div class="line">Terminal • Server • Port</div>
 <br>
 
-<!-- Boot sequence -->
-<div id="boot"></div>
+<div class="line">$ connecting to stream...</div>
+<div class="line">$ status: ON AIR</div>
 
-<!-- <!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>TSP FM</title>
-<style>
-body {
-  background: #000;
-  color: #00ff66;
-  font-family: monospace;
-  margin: 40px;
-}
-h1 {
-  font-weight: normal;
-}
-.line {
-  margin: 6px 0;
-}
-#cursor {
-  display: inline-block;
-  width: 10px;
-  animation: blink 1s steps(1) infinite;
-}
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-button {
-  background: black;
-  color: #00ff66;
-  border: 1px solid #00ff66;
-  padding: 8px 12px;
-  font-family: monospace;
-  cursor: pointer;
-}
-button:hover {
-  background: #00ff66;
-  color: black;
-}
-audio {
-  margin-top: 10px;
-  display: none; /* Сначала скрыт, появится после boot */
-}
-</style>
-</head>
-<body>
+/* ───────── STREAM ADDRESS ───────── */
 
-<h1>TSP FM</h1>
-<div class="line">Terminal • Server • Port</div>
-<br>
-
-<!-- Boot sequence -->
-<div id="boot"></div>
-
-<!-- Плеер (вставь ссылку сюда) -->
-<audio id="player" controls autoplay>
-  <source src="<ВСТАВЬ_ССЫЛКУ_ЗДЕСЬ_ОТ_LTH>/radio.mp3" type="audio/mpeg">
+<audio controls autoplay>
+<source src="ССЫЛКА_ОТ_LTH/radio.mp3" type="audio/mpeg">
 </audio>
+
+/* ────────────────────────────────── */
 
 <br><br>
 
-<!-- Кнопка reconnect -->
-<button id="reconnect" onclick="location.reload()">$ reconnect</button>
-
-<script>
-// Fake boot sequence
-const bootLines = [
-  "$ booting TSP FM...",
-  "$ loading music library...",
-  "$ starting liquidsoap...",
-  "$ connecting to Icecast...",
-  "$ stream ready!"
-];
-
-const bootDiv = document.getElementById("boot");
-const player = document.getElementById("player");
-const btn = document.getElementById("reconnect");
-let i = 0;
-
-function showLine() {
-  if(i < bootLines.length) {
-    const line = document.createElement("div");
-    line.className = "line";
-    line.textContent = bootLines[i] + " ";
-    const cursor = document.createElement("span");
-    cursor.id = "cursor";
-    cursor.textContent = "_";
-    line.appendChild(cursor);
-    bootDiv.appendChild(line);
-    i++;
-    setTimeout(showLine, 800); // пауза между строками
-  } else {
-    // после завершения boot — показываем плеер и кнопку
-    player.style.display = "block";
-    btn.style.display = "inline-block";
-  }
-}
-
-showLine();
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="ru">
-<head>
-<meta charset="UTF-8">
-<title>TSP FM</title>
-<style>
-body {
-  background: #000;
-  color: #00ff66;
-  font-family: monospace;
-  margin: 40px;
-}
-h1 {
-  font-weight: normal;
-}
-.line {
-  margin: 6px 0;
-}
-#cursor {
-  display: inline-block;
-  width: 10px;
-  animation: blink 1s steps(1) infinite;
-}
-@keyframes blink {
-  0%, 50% { opacity: 1; }
-  51%, 100% { opacity: 0; }
-}
-button {
-  background: black;
-  color: #00ff66;
-  border: 1px solid #00ff66;
-  padding: 8px 12px;
-  font-family: monospace;
-  cursor: pointer;
-}
-button:hover {
-  background: #00ff66;
-  color: black;
-}
-audio {
-  margin-top: 10px;
-  display: none; /* Сначала скрыт, появится после boot */
-}
-</style>
-</head>
-<body>
-
-<h1>TSP FM</h1>
-<div class="line">Terminal • Server • Port</div>
-<br>
-
-<!-- Boot sequence -->
-<div id="boot"></div>
-
-<!-- Плеер (вставь ссылку сюда) -->
-
-<audio id="player" controls autoplay>
-  <source src="<ВСТАВЬ_ССЫЛКУ_ЗДЕСЬ_ОТ_LTH>/radio.mp3" type="audio/mpeg">
-</audio>
-
-<br><br>
-
-<!-- Кнопка reconnect -->
-<button id="reconnect" onclick="location.reload()">$ reconnect</button>
-
-<script>
-// Fake boot sequence
-const bootLines = [
-  "$ booting TSP FM...",
-  "$ loading music library...",
-  "$ starting liquidsoap...",
-  "$ connecting to Icecast...",
-  "$ stream ready!"
-];
-
-const bootDiv = document.getElementById("boot");
-const player = document.getElementById("player");
-const btn = document.getElementById("reconnect");
-let i = 0;
-
-function showLine() {
-  if(i < bootLines.length) {
-    const line = document.createElement("div");
-    line.className = "line";
-    line.textContent = bootLines[i] + " ";
-    const cursor = document.createElement("span");
-    cursor.id = "cursor";
-    cursor.textContent = "_";
-    line.appendChild(cursor);
-    bootDiv.appendChild(line);
-    i++;
-    setTimeout(showLine, 800); // пауза между строками
-  } else {
-    // после завершения boot — показываем плеер и кнопку
-    player.style.display = "block";
-    btn.style.display = "inline-block";
-  }
-}
-
-showLine();
-</script>
-
-</body>
-</html> (вставь ссылку сюда) -->
-
-<audio id="player" controls autoplay>
-  <source src="<ВСТАВЬ_ССЫЛКУ_ЗДЕСЬ_ОТ_LTH>/radio.mp3" type="audio/mpeg">
-</audio>
-
-<br><br>
-
-<!-- Кнопка reconnect -->
-<button id="reconnect" onclick="location.reload()">$ reconnect</button>
-
-<script>
-// Fake boot sequence
-const bootLines = [
-  "$ booting TSP FM...",
-  "$ loading music library...",
-  "$ starting liquidsoap...",
-  "$ connecting to Icecast...",
-  "$ stream ready!"
-];
-
-const bootDiv = document.getElementById("boot");
-const player = document.getElementById("player");
-const btn = document.getElementById("reconnect");
-let i = 0;
-
-function showLine() {
-  if(i < bootLines.length) {
-    const line = document.createElement("div");
-    line.className = "line";
-    line.textContent = bootLines[i] + " ";
-    const cursor = document.createElement("span");
-    cursor.id = "cursor";
-    cursor.textContent = "_";
-    line.appendChild(cursor);
-    bootDiv.appendChild(line);
-    i++;
-    setTimeout(showLine, 800); // пауза между строками
-  } else {
-    // после завершения boot — показываем плеер и кнопку
-    player.style.display = "block";
-    btn.style.display = "inline-block";
-  }
-}
-
-showLine();
-</script>
+<button onclick="location.reload()">
+$ reconnect
+</button>
 
 </body>
 </html>
