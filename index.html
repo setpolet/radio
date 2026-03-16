@@ -1,123 +1,91 @@
 <!DOCTYPE html>
 <html lang="ru">
-
 <head>
-
 <meta charset="UTF-8">
 <title>TSP FM</title>
-
 <style>
-
-body{
-background:#000;
-color:#00ff66;
-font-family:monospace;
-margin:40px;
+body {
+  background: #000;
+  color: #00ff66;
+  font-family: monospace;
+  margin: 40px;
 }
-
-h1{
-font-weight:normal;
+.line {
+  margin: 4px 0;
 }
-
-.line{
-margin:6px 0;
+#cursor {
+  display: inline-block;
+  width: 10px;
+  animation: blink 1s steps(1) infinite;
 }
-
-button{
-background:black;
-color:#00ff66;
-border:1px solid #00ff66;
-padding:8px 12px;
-font-family:monospace;
-cursor:pointer;
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
 }
-
-button:hover{
-background:#00ff66;
-color:black;
+button {
+  background:black;
+  color:#00ff66;
+  border:1px solid #00ff66;
+  padding:8px 12px;
+  font-family: monospace;
+  cursor:pointer;
 }
-
-audio{
-margin-top:10px;
+button:hover {
+  background:#00ff66;
+  color:black;
 }
-
-.cursor{
-animation:blink 1s infinite;
-}
-
-@keyframes blink{
-0%{opacity:1}
-50%{opacity:0}
-100%{opacity:1}
-}
-
 </style>
-
 </head>
-
 <body>
 
 <h1>TSP FM</h1>
-
 <div class="line">Terminal • Server • Port</div>
-<br>
+<div id="boot"></div>
 
-<div class="line">$ booting TSP FM<span class="cursor">_</span></div>
-<div class="line">$ connecting to stream...</div>
-<div class="line">$ status: ON AIR</div>
-
-<br>
-
-<div class="line">$ now playing:</div>
-<div class="line" id="track">loading...</div>
-
-<br>
-
-<audio id="player" controls autoplay></audio>
+<audio id="player" controls autoplay style="margin-top:10px; display:none;">
+  <source src="ССЫЛКА_ОТ_LTH/radio.mp3" type="audio/mpeg">
+</audio>
 
 <br><br>
-
-<button onclick="location.reload()">
+<button onclick="location.reload()" style="display:none;" id="reconnect">
 $ reconnect
 </button>
 
-
 <script>
+const bootLines = [
+  "$ booting TSP FM...",
+  "$ loading music library...",
+  "$ starting liquidsoap...",
+  "$ connecting to Icecast...",
+  "$ stream ready!"
+];
 
-/* ───────── STREAM ADDRESS ───────── */
+const bootDiv = document.getElementById("boot");
+const player = document.getElementById("player");
+const btn = document.getElementById("reconnect");
+let i = 0;
 
-const STREAM = "https://4979a68ff78c84.lhr.life"
-
-/* ────────────────────────────────── */
-
-document.getElementById("player").src = STREAM + "/radio.mp3"
-
-
-async function getTrack(){
-
-try{
-
-let res = await fetch(STREAM + "/status-json.xsl?t=" + Date.now())
-let data = await res.json()
-
-let title = data.icestats.source.title
-
-document.getElementById("track").innerText = title
-
-}catch{
-
-document.getElementById("track").innerText = "unknown"
-
+function showLine() {
+  if(i < bootLines.length) {
+    const line = document.createElement("div");
+    line.className = "line";
+    line.textContent = bootLines[i] + " ";
+    const cursor = document.createElement("span");
+    cursor.id = "cursor";
+    cursor.textContent = "_";
+    line.appendChild(cursor);
+    bootDiv.appendChild(line);
+    i++;
+    setTimeout(showLine, 800); // задержка между строками
+  } else {
+    // после загрузки — показываем плеер и кнопку
+    player.style.display = "block";
+    btn.style.display = "inline-block";
+  }
 }
 
-}
-
-getTrack()
-
-setInterval(getTrack,5000)
-
+showLine();
 </script>
-
 
 </body>
 </html>
