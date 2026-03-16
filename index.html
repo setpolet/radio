@@ -1,81 +1,98 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+
 <meta charset="UTF-8">
-<title>TSP FM Terminal Player</title>
+
+<title>TSP FM</title>
+
 <style>
+
 body {
-  background:#000;
-  color:#00ff66;
-  font-family: monospace;
-  margin:40px;
+background:#000;
+color:#00ff66;
+font-family: monospace;
+margin:40px;
 }
 
 h1 {
-  font-weight: normal;
+font-weight: normal;
 }
 
-#terminal-player {
-  background:black;
-  color:#00ff66;
-  font-family: monospace;
-  padding:20px;
-  max-width:300px;
+button {
+background:black;
+color:#00ff66;
+border:1px solid #00ff66;
+padding:8px 12px;
+font-family: monospace;
+cursor:pointer;
 }
 
-#terminal-player button {
-  background:black;
-  color:#00ff66;
-  border:1px solid #00ff66;
-  padding:6px 12px;
-  margin-right:6px;
-  font-family: monospace;
-  cursor:pointer;
+button:hover {
+background:#00ff66;
+color:black;
 }
 
-#terminal-player button:hover {
-  background:#00ff66;
-  color:black;
+audio {
+margin-top:10px;
 }
 
 .line {
-  margin:6px 0;
+margin:6px 0;
 }
+
 </style>
+
 </head>
+
 <body>
 
 <h1>TSP FM</h1>
 
-<div id="terminal-player">
-  <div class="line">$ TSP FM</div>
-  <div class="line">$ status: <span id="status">Paused</span></div>
-  <div class="line">
-    <button id="play">▶️ Play</button>
-    <button id="pause">⏸️ Pause</button>
+<div class="line">Terminal • Server • Port</div>
+<br>
+
+<div class="line">$ connecting to stream...</div>
+<div class="line">$ status: ON AIR</div>
+
+<div id="terminal-player" class="line">
+  $ PLAYING: <span id="track-name">Radio Stream</span>
+  <button id="play-btn">$ PLAY</button>
+  <div id="progress-bar" style="height:4px; background:#003300; margin-top:4px;">
+    <div id="progress-fill" style="width:0%; height:100%; background:#00ff66;"></div>
   </div>
 </div>
 
 <script>
 const audio = new Audio("ССЫЛКА_ОТ_LTH/radio.mp3");
-audio.preload = "auto";
+audio.autoplay = true;
 
-const status = document.getElementById("status");
+const playBtn = document.getElementById("play-btn");
+const progressFill = document.getElementById("progress-fill");
 
-document.getElementById("play").onclick = () => {
-  audio.play();
-  status.textContent = "Playing";
-};
+playBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    playBtn.textContent = "$ PAUSE";
+  } else {
+    audio.pause();
+    playBtn.textContent = "$ PLAY";
+  }
+});
 
-document.getElementById("pause").onclick = () => {
-  audio.pause();
-  status.textContent = "Paused";
-};
-
-// Автообновление статуса, если поток остановился сам
-audio.onpause = () => { status.textContent = "Paused"; }
-audio.onplay = () => { status.textContent = "Playing"; }
+audio.addEventListener("timeupdate", () => {
+  if(audio.duration) {
+    const percent = (audio.currentTime / audio.duration) * 100;
+    progressFill.style.width = percent + "%";
+  }
+});
 </script>
+
+<br><br>
+
+<button onclick="location.reload()">
+$ reconnect
+</button>
 
 </body>
 </html>
