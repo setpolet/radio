@@ -9,41 +9,38 @@
 <style>
 
 body {
-background:#000;
-color:#00ff66;
-font-family: monospace;
-margin:40px;
+  background:#000;
+  color:#00ff66;
+  font-family: monospace;
+  margin:40px;
 }
 
 h1 {
-font-weight: normal;
+  font-weight: normal;
 }
 
 button {
-background:black;
-color:#00ff66;
-border:1px solid #00ff66;
-padding:8px 12px;
-font-family: monospace;
-cursor:pointer;
+  background:black;
+  color:#00ff66;
+  border:1px solid #00ff66;
+  padding:6px 10px;
+  font-family: monospace;
+  cursor:pointer;
 }
 
 button:hover {
-background:#00ff66;
-color:black;
-}
-
-audio {
-margin-top:10px;
+  background:#00ff66;
+  color:black;
 }
 
 .line {
-margin:6px 0;
+  margin:6px 0;
 }
 
-input[type=range] {
-  accent-color: #00ff66;
-  background: black;
+.bar {
+  height:2px;
+  background:#00ff66;
+  margin-top:10px;
 }
 
 </style>
@@ -60,24 +57,36 @@ input[type=range] {
 <div class="line">$ connecting to stream...</div>
 <div class="line">$ status: ON AIR</div>
 
-<div id="terminal-player" class="line">
-  $ PLAYING: <span id="track-name">Radio Stream</span>
+<div class="line">
+  $ PLAYING: Radio Stream
+  
   <button id="play-btn">$ PLAY</button>
+
   <span id="volume-control" style="margin-left:10px; cursor:pointer;">
-  $ VOL [<span id="volume-bars">██████████</span>]
-</span>
-  <div id="progress-bar" style="height:4px; background:#003300; margin-top:4px;">
-    <div id="progress-fill" style="width:0%; height:100%; background:#00ff66;"></div>
-  </div>
+    $ VOL [████████░░]
+  </span>
 </div>
 
+<div class="bar"></div>
+
+<br>
+
+<button onclick="location.reload()">
+  $ reconnect
+</button>
+
 <script>
-const audio = new Audio("https://37af0538e90b5a.lhr.life/radio.mp3");
+
+const audio = new Audio("ССЫЛКА_ОТ_LTH/radio.mp3");
 audio.autoplay = true;
 
 const playBtn = document.getElementById("play-btn");
-const progressFill = document.getElementById("progress-fill");
+const volumeControl = document.getElementById("volume-control");
 
+let volume = 0.8; // стартовая громкость
+audio.volume = volume;
+
+// PLAY / PAUSE
 playBtn.addEventListener("click", () => {
   if (audio.paused) {
     audio.play();
@@ -88,51 +97,26 @@ playBtn.addEventListener("click", () => {
   }
 });
 
-audio.addEventListener("timeupdate", () => {
-  if(audio.duration) {
-    const percent = (audio.currentTime / audio.duration) * 100;
-    progressFill.style.width = percent + "%";
-  }
-});
-
-const volumeSlider = document.getElementById("volume-slider");
-
-volumeSlider.addEventListener("input", () => {
-  audio.volume = volumeSlider.value;
-});
-
-<script>
-const volumeBars = document.getElementById("volume-bars");
-
-let volume = 1; // от 0 до 1
-
+// Обновление ASCII громкости
 function updateVolumeDisplay() {
-  const totalBars = 10;
-  const filledBars = Math.round(volume * totalBars);
-  const emptyBars = totalBars - filledBars;
-
-  volumeBars.textContent =
-    "█".repeat(filledBars) + "░".repeat(emptyBars);
+  let bars = Math.round(volume * 10);
+  let filled = "█".repeat(bars);
+  let empty = "░".repeat(10 - bars);
+  volumeControl.textContent = $ VOL [${filled}${empty}];
 }
 
-updateVolumeDisplay();
-
-document.getElementById("volume-control").addEventListener("click", () => {
-  volume -= 0.1;
-  if (volume < 0) volume = 1;
-
+// Клик = изменение громкости
+volumeControl.addEventListener("click", () => {
+  volume += 0.1;
+  if (volume > 1) volume = 0;
   audio.volume = volume;
   updateVolumeDisplay();
 });
-</script>
-  
-</script>
 
-<br><br>
+// Инициализация
+updateVolumeDisplay();
 
-<button onclick="location.reload()">
-$ reconnect
-</button>
+</script>
 
 </body>
 </html>
