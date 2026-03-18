@@ -101,6 +101,7 @@ volumeSlider.addEventListener("input", () => {
   audio.volume = volumeSlider.value;
 });
 
+<script>
 const volumeBars = document.getElementById("volume-bars");
 
 let volume = 1; // от 0 до 1
@@ -123,6 +124,7 @@ document.getElementById("volume-control").addEventListener("click", () => {
   audio.volume = volume;
   updateVolumeDisplay();
 });
+</script>
   
 </script>
 
