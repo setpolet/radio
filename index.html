@@ -63,10 +63,8 @@ input[type=range] {
 <div id="terminal-player" class="line">
   $ PLAYING: <span id="track-name">Radio Stream</span>
   <button id="play-btn">$ PLAY</button>
-  <span id="volume-control" style="margin-left:10px;">
-  $ VOL
-  <input id="volume-slider" type="range" min="0" max="1" step="0.01" value="1"
-    style="vertical-align:middle;">
+  <span id="volume-control" style="margin-left:10px; cursor:pointer;">
+  $ VOL [<span id="volume-bars">██████████</span>]
 </span>
   <div id="progress-bar" style="height:4px; background:#003300; margin-top:4px;">
     <div id="progress-fill" style="width:0%; height:100%; background:#00ff66;"></div>
@@ -102,6 +100,30 @@ const volumeSlider = document.getElementById("volume-slider");
 volumeSlider.addEventListener("input", () => {
   audio.volume = volumeSlider.value;
 });
+
+const volumeBars = document.getElementById("volume-bars");
+
+let volume = 1; // от 0 до 1
+
+function updateVolumeDisplay() {
+  const totalBars = 10;
+  const filledBars = Math.round(volume * totalBars);
+  const emptyBars = totalBars - filledBars;
+
+  volumeBars.textContent =
+    "█".repeat(filledBars) + "░".repeat(emptyBars);
+}
+
+updateVolumeDisplay();
+
+document.getElementById("volume-control").addEventListener("click", () => {
+  volume -= 0.1;
+  if (volume < 0) volume = 1;
+
+  audio.volume = volume;
+  updateVolumeDisplay();
+});
+  
 </script>
 
 <br><br>
